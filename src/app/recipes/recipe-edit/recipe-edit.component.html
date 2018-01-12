@@ -1,0 +1,117 @@
+<form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+  <div>
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input
+              type="text"
+              id="name"
+              class="form-control"
+              formControlName="name"
+              [(ngModel)]="recipe.name"
+      >
+      <span
+              *ngIf="!recipeForm.get('name').valid && recipeForm.get('name').touched"
+              class="help-block">
+          <span *ngIf="recipeForm.get('name').errors['required']">This field is required!</span>
+      </span>
+    </div>
+    <div class="form-group">
+      <label for="name">description</label>
+      <textarea
+              id="description"
+              class="form-control"
+              formControlName="description"
+              [(ngModel)]="recipe.description"
+      ></textarea>
+      <span
+              *ngIf="!recipeForm.get('description').valid && recipeForm.get('description').touched"
+              class="help-block">
+          <span *ngIf="recipeForm.get('description').errors['required']">This field is required!</span>
+      </span>
+    </div>
+    <div class="form-group">
+      <label for="name">Image Url</label>
+      <input
+              type="text"
+              id="imagePath"
+              class="form-control"
+              formControlName="imagePath"
+              [(ngModel)]="recipe.imagePath"
+      >
+      <span
+              *ngIf="!recipeForm.get('imagePath').valid && recipeForm.get('imagePath').touched"
+              class="help-block">
+          <span *ngIf="recipeForm.get('imagePath').errors['required']">This field is required!</span>
+      </span>
+    </div>
+    <div class="row" *ngIf="recipe">
+      <div class="col-xs-12">
+        <img
+                [src]="recipe.imagePath"
+                alt="{{ recipe.name }}"
+                class="img-responsive"
+                style="max-height: 300px"
+        >
+      </div>
+    </div>
+  </div>
+
+  <hr>
+  <div class="row">
+    <div class="col-xs-12">
+      <button
+              class="btn btn-success"
+              (click)="addIngredient()"
+              type="button"
+      >Add Ingredient</button>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <!-- list of ingredients -->
+    <div formArrayName="ingredients" class="col-xs-12">
+      <div *ngFor="let ingredient of recipeForm.controls.ingredients.controls; let i=index">
+        <div [formGroupName]="i" class="row  form-group">
+            <div class="col-xs-8">
+              <input
+                      type="text"
+                      class="form-control"
+                      formControlName="name"
+                      [(ngModel)]="recipe.ingredients[i].name">
+              <!--display error message if name is not valid-->
+              <small *ngIf="
+                  !recipeForm.get('ingredients').controls[i].controls.name.valid &&
+                  recipeForm.get('ingredients').controls[i].controls.name.touched"
+              >
+                <strong style="color:red;">Name is required</strong>
+              </small>
+            </div>
+            <div class="col-xs-2">
+              <input
+                      type="number"
+                      class="form-control"
+                      formControlName="amount"
+                      [(ngModel)]="recipe.ingredients[i].amount"
+                      pattern="^[1-9]+[0-9]*$">
+            </div>
+            <div class="col-xs-2">
+              <button
+                      class="btn btn-danger"
+                      type="button"
+                      (click)="removeIngredient(i)"
+              >X</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <span
+          *ngIf="!recipeForm.valid && recipeForm.touched"
+          class="help-block">Please enter a valid data!</span>
+  <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!recipeForm.valid"
+  >Submit
+  </button>
+</form>

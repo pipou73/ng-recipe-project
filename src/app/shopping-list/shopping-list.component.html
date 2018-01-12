@@ -1,16 +1,45 @@
-<div class="row">
-  <div class="col-xs-10">
-    <!--(ingredientAdded)="onIngredientAdded($event)"-->
-    <app-shopping-edit ></app-shopping-edit>
-    <hr>
-    <ul class="list-group">
-      <a
-              class="list-group-item"
-              style="cursor: pointer"
-              *ngFor="let ingredient of ingredients"
-      >
-        {{ ingredient.name }} ({{ ingredient.amount }})
-      </a>
-    </ul>
-  </div>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <app-shopping-edit></app-shopping-edit>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-6">
+            <h3><strong>Ingredients of List</strong></h3>
+        </div>
+        <div class="col-xs-6">
+            <h3><strong>Recipe to container the ingredients</strong></h3>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col-xs-6">
+            <ul class="list-group">
+
+                <a
+                        class="list-group-item"
+                        style="cursor: pointer"
+                        *ngFor="let ingredient of ingredients"
+                        [ngClass]="ingredient === ingredientSelected ? 'active' : ''"
+                        (click)="selectedIngredient(ingredient)"
+                >
+                    {{ ingredient.name }} ({{ ingredient.amount }})
+                </a>
+            </ul>
+        </div>
+        <div class="col-xs-6">
+            <ul class="list-group" *ngIf="this.ingredientSelected">
+                <a
+                        class="list-group-item"
+                        style="cursor: pointer"
+                        *ngFor="let recipe of recipes"
+                        [routerLink]="['../recipes', recipe.id]"
+                >
+                    {{ recipe.name }} ( {{ ingredientSelected.name }} : {{ ingredientSelected.amount }})
+                </a>
+            </ul>
+        </div>
+    </div>
 </div>
